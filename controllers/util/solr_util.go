@@ -277,18 +277,24 @@ func GenerateStatefulSet(solrCloud *solr.SolrCloud, solrCloudStatus *solr.SolrCl
 		},
 	}
 
+	// Initialize PodOptions if not provided
+	if solrCloud.Spec.CustomSolrKubeOptions.PodOptions == nil {
+		solrCloud.Spec.CustomSolrKubeOptions.PodOptions = &solr.PodOptions{}
+	}
+
+	// Apply in customizations if provided by user
 	if solrCloud.Spec.SolrImage.ImagePullSecret != "" {
 		stateful.Spec.Template.Spec.ImagePullSecrets = []corev1.LocalObjectReference{
 			{Name: solrCloud.Spec.SolrImage.ImagePullSecret},
 		}
 	}
 
-	if solrCloud.Spec.SolrPod.Affinity != nil {
-		stateful.Spec.Template.Spec.Affinity = solrCloud.Spec.SolrPod.Affinity
+	if solrCloud.Spec.CustomSolrKubeOptions.PodOptions.Affinity != nil {
+		stateful.Spec.Template.Spec.Affinity = solrCloud.Spec.CustomSolrKubeOptions.PodOptions.Affinity
 	}
 
-	if solrCloud.Spec.SolrPod.Resources.Limits != nil || solrCloud.Spec.SolrPod.Resources.Requests != nil {
-		stateful.Spec.Template.Spec.Containers[0].Resources = solrCloud.Spec.SolrPod.Resources
+	if solrCloud.Spec.CustomSolrKubeOptions.PodOptions.Resources.Limits != nil || solrCloud.Spec.CustomSolrKubeOptions.PodOptions.Resources.Requests != nil {
+		stateful.Spec.Template.Spec.Containers[0].Resources = solrCloud.Spec.CustomSolrKubeOptions.PodOptions.Resources
 	}
 
 	return stateful

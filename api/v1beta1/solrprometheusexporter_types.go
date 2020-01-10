@@ -34,10 +34,9 @@ type SolrPrometheusExporterSpec struct {
 	// +optional
 	Image *ContainerImage `json:"image,omitempty"`
 
-	// Pod defines the policy to create pod for the SolrCloud.
-	// Updating the Pod does not take effect on any existing pods.
+	// Provide custom options for kubernetes objects created for the Solr Cloud.
 	// +optional
-	PodPolicy SolrPodPolicy `json:"podPolicy,omitempty"`
+	CustomPrometheusKubeOptions CustomPrometheusKubeOptions `json:"customPrometheusKubeOptions,omitempty"`
 
 	// The entrypoint into the exporter. Defaults to the official docker-solr location.
 	// +optional
@@ -158,6 +157,20 @@ type SolrPrometheusExporter struct {
 
 	Spec   SolrPrometheusExporterSpec   `json:"spec,omitempty"`
 	Status SolrPrometheusExporterStatus `json:"status,omitempty"`
+}
+
+type CustomPrometheusKubeOptions struct {
+	// PodOptions defines the custom options for prometheusExporter pod.
+	// +optional
+	PodOptions *PodOptions `json:"podOptions,omitempty"`
+
+	// DeploymentOptions defines the custom options for the prometheusExporter Deployment.
+	// +optional
+	DeploymentOptions *DeploymentOptions `json:"deploymentOptions,omitempty"`
+
+	// ServiceOptions defines the custom options for solrCloud Services.
+	// +optional
+	ConfigMapOptions *ConfigMapOptions `json:"configMapOptions,omitempty"`
 }
 
 // WithDefaults set default values when not defined in the spec.

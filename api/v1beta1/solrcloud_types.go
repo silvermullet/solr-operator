@@ -199,7 +199,7 @@ type CustomSolrKubeOptions struct {
 	// NodeServiceOptions defines the custom options for the individual solrCloud Node services, if they are created.
 	// These services will only be created when exposing SolrNodes externally in the AddressabilityOptions.
 	// +optional
-	NodeServiceOptions *ServiceOptions `json:"headlessServiceOptions,omitempty"`
+	NodeServiceOptions *ServiceOptions `json:"nodeServiceOptions,omitempty"`
 
 	// ServiceOptions defines the custom options for solrCloud Services.
 	// +optional
